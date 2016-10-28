@@ -10,5 +10,12 @@ import scrapy
 
 class LittletommyItem(scrapy.Item):
     # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+    name = scrapy.Field()
+    valid = scrapy.Field()
+    url = scrapy.Field()
+    category = scrapy.Field()
+    color = scrapy.Field()
+    price = scrapy.Field()
+    pic_url = scrapy.Field()
+    
+    filtered = scrapy.Field()
