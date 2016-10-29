@@ -9,20 +9,42 @@
 #import scrapy.exceptions.DropItem
 from scrapy.exceptions import DropItem
 from scrapy.exporters import XmlItemExporter
+from scrapy import signals
 import os.path
+import logging
+logging.basicConfig(filename='log_pipe.log',level=logging.INFO)
 
-class LittletommyPipeline(object):
+class xmlExportPipeline(object):
+
+    def __init__(self):
+        self.files = {}
+        
+    @classmethod
+    def from_crawler(clc, crawler):
+        pipeline = clc()
+        crawler.signals.connect(pipeline.spider_opened, signals.spider_opened)
+        crawler.signals.connect(pipeline.spider_closed, signals.spider_closed)
+        return pipeline
+
+    def spider_opened(self, spider):
+        m_file = open('%s_products.xml' % spider.name, 'w+b')
+        self.files[spider] = m_file
+        self.exporter = XmlItemExporter(m_file,"Products","Item")
+        self.exporter.start_exporting()
+
+    def spider_closed(self, spider):
+        self.exporter.finish_exporting()
+        m_file = self.files.pop(spider)
+        m_file.close()
+
     def process_item(self, item, spider):
-
-        if(not os.path.exists('store.log')):
-            db = open('store.log','w')
-            db.write("#supreme log")
-        else:
-            db = open('store.log','a')
+        logging.info("tommyPipeline: process_item called")
         
         if not item['valid'] or item['valid'] == '0':
+            logging.info("tommyPipeline: dropped an item")
             raise DropException('item not valid')
-        feed = XmlItemExporter(db)
+        
+        logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
 
-        db.close()
+        self.exporter.export_item(item)
         return item
