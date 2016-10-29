@@ -29,7 +29,7 @@ class xmlExportPipeline(object):
     def spider_opened(self, spider):
         m_file = open('%s_products.xml' % spider.name, 'w+b')
         self.files[spider] = m_file
-        self.exporter = XmlItemExporter(m_file,"Products","Item")
+        self.exporter = XmlItemExporter(m_file)
         self.exporter.start_exporting()
 
     def spider_closed(self, spider):
