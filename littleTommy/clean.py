@@ -2,8 +2,9 @@
 """
 Author: Guanduo
 chmod +x clean.py
-./clean.py will work base shebang above
-default is to clean all .pyc files recursively form current dir to all sub
+./clean.py will work base on shebang above
+default is to clean all .pyc files recursively from current dir to all 
+
 -all: clean all .pyc, .xml, .log
 -xml: clean .pyc, .xml
 -log: clean .pyc, .log
