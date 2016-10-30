@@ -25,13 +25,13 @@ class supremeSpider(CrawlSpider):
         #load info to an Item object
         #set m_item['valid'] = 1 for valid parsing. Otherwise, set 0 to be dropped in pipeline
         l = ItemLoader(item=LittletommyItem(),response=response)
-        
         #parse data here
         category = (str(response.url).split('/'))[-3]
-        title = response.selector.xpath('//head/title/text()').extract_first()
+        #Supreme web uses utf-8, will cause decode to str error. Add encode and ignore \ to solve the issue
+        title = response.selector.xpath('//head/title/text()').extract_first().encode('ascii','backslashreplace')
         tmpList = str(title).split('-')
         color = tmpList[-1]
-        picUrl = response.selector.xpath('//*[@id="img-main"]/@src').extract_first()
+        picUrl = response.selector.xpath('//*[@id="img-main"]/@src').extract_first().encode('ascii','backslashreplace')
         picUrl = 'http:' + str(picUrl)
         name = tmpList[0]
         l.add_value('name',name)
