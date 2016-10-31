@@ -17,5 +17,5 @@ class LittletommyItem(scrapy.Item):
     color = scrapy.Field()
     price = scrapy.Field()
     pic_url = scrapy.Field()
-    
-    filtered = scrapy.Field()
+    #used for indexing in dbManage
+    hash_key = scrapy.Field()
