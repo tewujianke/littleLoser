@@ -34,6 +34,7 @@ class supremeSpider(CrawlSpider):
         picUrl = response.selector.xpath('//*[@id="img-main"]/@src').extract_first().encode('ascii','backslashreplace')
         picUrl = 'http:' + str(picUrl)
         name = tmpList[0]
+        name = name.replace('\\\\xae','')
         l.add_value('name',name)
         l.add_value('color',color)
         l.add_value('url',response.url)
