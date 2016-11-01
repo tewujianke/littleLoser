@@ -12,10 +12,11 @@ class NotStringExcept(Exception): pass
 
 
 class dbManager(object):
-    """
-    Constructor requires a string of path to the .xml file. Typically each xml needs one dbManager
-    """
+
     def __init__(self,xml_file):
+        """
+        Constructor requires a string of path to the .xml file. Typically each xml needs one dbManager
+        """
         if not isinstance(xml_file,str):
             raise NotStringExcept("Not a string passed to dbManager")
         self.xml_file = xml_file
@@ -24,10 +25,12 @@ class dbManager(object):
         self.mem = {}
         self.num_of_element = 0
 
-    """
-    Calling Load will load .xml into the memory
-    """
+
     def load(self):
+        """
+        Calling Load will load .xml into the memory
+        Must be called first before any other operations!
+        """
         if not exists(str(self.xml_file)):
             raise IOError("file not exists")
         else:
@@ -45,16 +48,19 @@ class dbManager(object):
                 print(itemInSubDict)
                 self.mem[str(key)]=itemInSubDict
 
-    """
-    return the number of product items loaded
-    """
+   
     def get_num(self):
+        """
+        Return the number of product items loaded
+        """
         print (str(self.num_of_element)+"")
         return self.num_of_element
 
                 
     def debug_print(self):
-
+        """
+        Debug only. Exhaustively print out the loaded info
+        """
         print(self.mem)
 
 if __name__ == "__main__":
