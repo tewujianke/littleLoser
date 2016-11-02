@@ -14,7 +14,7 @@ import os.path
 
 import shelve
 import logging
-logging.basicConfig(filename='log_pipe.log',level=logging.INFO)
+#logging.basicConfig(filename='log_pipe.log',level=logging.INFO)
 
 class dbExportPipeline(object):
 

@@ -37,7 +37,7 @@ class supremeSpider(CrawlSpider):
         name = name.replace('\\\\xae','')
         name = name.replace('\\xae','')
         l.add_value('name',name)
-        l.add_value('color',color)
+        l.add_value('color',color[1:])
         l.add_value('url',response.url)
         l.add_xpath('price','//p[@class="price"]/span/text()')
         l.add_value('pic_url',picUrl)

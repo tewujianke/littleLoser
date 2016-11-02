@@ -8,6 +8,7 @@ from __future__ import print_function
 
 from os.path import exists
 import shelve
+import logging
 
 class NotStringExcept(Exception): pass
 
