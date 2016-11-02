@@ -21,7 +21,7 @@ class dbManager(object):
         if not isinstance(db_file_path,str):
             raise NotStringExcept("Not a string passed to dbManager")
         self.db_file_path = db_file_path
-        self.mem = {}
+        self.mem = None
         self.num_of_element = None
         self.instance_name = name
         self.dbgmode=dbgmode
@@ -35,7 +35,8 @@ class dbManager(object):
             raise IOError("file not exists")
         else:
             self.mem = shelve.open(str(self.db_file_path))
-   
+
+        self.num_of_element = len(self.mem)
     def get_num(self):
         """
         Return the number of product items loaded
