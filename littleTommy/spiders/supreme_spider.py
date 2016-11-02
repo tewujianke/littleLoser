@@ -35,6 +35,7 @@ class supremeSpider(CrawlSpider):
         picUrl = 'http:' + str(picUrl)
         name = tmpList[0]
         name = name.replace('\\\\xae','')
+        name = name.replace('\\xae','')
         l.add_value('name',name)
         l.add_value('color',color)
         l.add_value('url',response.url)
