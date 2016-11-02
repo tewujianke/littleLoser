@@ -66,7 +66,7 @@ FEED_FORMAT = 'xml'
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    'littleTommy.pipelines.xmlExportPipeline': 300,
+    'littleTommy.pipelines.dbExportPipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

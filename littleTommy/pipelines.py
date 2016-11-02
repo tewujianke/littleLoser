@@ -8,13 +8,15 @@
 #import scrapy.exceptions.DropItem as DropException
 #import scrapy.exceptions.DropItem
 from scrapy.exceptions import DropItem
-from scrapy.exporters import XmlItemExporter
+
 from scrapy import signals
 import os.path
+
+import shelve
 import logging
 logging.basicConfig(filename='log_pipe.log',level=logging.INFO)
 
-class xmlExportPipeline(object):
+class dbExportPipeline(object):
 
     def __init__(self):
         self.files = {}
@@ -27,24 +29,25 @@ class xmlExportPipeline(object):
         return pipeline
 
     def spider_opened(self, spider):
-        m_file = open('%s_products.xml' % spider.name, 'w+b')
-        self.files[spider] = m_file
-        self.exporter = XmlItemExporter(m_file)
-        self.exporter.start_exporting()
+
+        pass
 
     def spider_closed(self, spider):
-        self.exporter.finish_exporting()
-        m_file = self.files.pop(spider)
-        m_file.close()
+        pass
 
     def process_item(self, item, spider):
         logging.info("tommyPipeline: process_item called")
-        
+        item_dict = {}
         if not item['valid'] or item['valid'] == '0':
             logging.info("tommyPipeline: dropped an item")
             raise DropException('item not valid')
         
         logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
+        db = shelve.open('%s_products'%spider.name)
+        for key in item.keys():
+            item_dict[str(key)] = item[str(key)]
+        db[str(item['name'])] = item_dict
+        
+        db.close()
 
-        self.exporter.export_item(item)
         return item
