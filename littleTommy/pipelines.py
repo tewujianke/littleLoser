@@ -45,8 +45,9 @@ class dbExportPipeline(object):
         logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
         db = shelve.open('%s_products'%spider.name)
         for key in item.keys():
-            item_dict[str(key)] = item[str(key)]
-        db[str(item['name'])] = item_dict
+            item_dict[str(key)] = item[str(key)][0]
+#        logging.info("!! %s: %s"%(item.keys(),item[key]))
+        db[str(item['name'][0])] = item_dict
         
         db.close()
 
