@@ -11,7 +11,7 @@ import shelve
 import logging
 
 class NotStringExcept(Exception): pass
-
+class KeyNotExistinMem(Exception): pass
 
 class dbManager(object):
 
@@ -88,10 +88,32 @@ class dbManager(object):
             new_db[key] = self.mem[key]
 
         new_db.close()
-        
+
+    def __contains__(self,something):
+        """
+        used in 'in' context. Check whether a key exsited in memory
+        e.g. if "supreme Shoe" in db:
+        """
+        if str(something) in self.mem:
+     
+            return True
+        else:
+          
+            return False
+
+    def __getitem__(self,key):
+        """
+        Return a dict of found item. Raise exception if key is not found
+        e.g. item_dict = db["Supreme Some Shoes"]
+        """
+        if not str(key) in self.mem:
+            raise KeyNotExistinMem(" Can't find '%s' in db"%str(key))
+
+        return self.mem[str(key)]
+    
     def generate_html(self):
         """
-        Generate a webpage containing all loaded items from .xml (or modified tree)
+        Generate a webpage containing all loaded items from .xml (or modified tree) Place holder. Not working now. Need future work
         """
         pass #place holder now
     
@@ -125,3 +147,14 @@ if __name__ == "__main__":
         
     newdb.load_db()
     newdb.debug_print()
+
+    try:
+        print("started")
+        if 'Supreme: Camo Waffle Thermal' in newdb:
+            print("Found")
+            print(newdb['Supreme: Camo Waffle Thermal'])
+        else:
+            print('not found')
+            
+    except Exception as K:
+        print ("Exception collected: %s" % K)
