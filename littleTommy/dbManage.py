@@ -35,7 +35,9 @@ class dbManager(object):
         if not exists(str(self.db_file_path)):
             raise IOError("file not exists")
         else:
-            self.mem = shelve.open(str(self.db_file_path))
+            database_read_from_disk = shelve.open(str(self.db_file_path))
+            self.mem = dict(database_read_from_disk)
+            database_read_from_disk.close()
 
         self.num_of_element = len(self.mem)
     def get_num(self):
@@ -47,15 +49,19 @@ class dbManager(object):
 
     def modify(self,product_key,attribute,value):
         """
-        Modify a product's attribute.
+        Modify a product's attribute. MUST BE CALLED IN A TRY BLOCK!!
         e.g. dbmanage.modify("supreme tom-style shoe",'price','$20')
+        This method only updates memory. Call update to write to disk
         """
+
         if not str(product_key) in self.mem:
+            print( "oopps")
             raise KeyError("Modifying a product though dbManage %s: %s key not found in mem" %(self.instance_name,str(product_key)))
 
         if not attribute in self.mem[product_key]:
             raise KeyError("Modifying an invalid attribute: %s"%attribute)
-
+        print("passed check")
+        
         if(self.dbgmode):
             print('dbg: old value is %s'%self.mem[product_key][attribute])
 
@@ -64,6 +70,25 @@ class dbManager(object):
         if(self.dbgmode):
             print('dbg: new value is %s'%self.mem[product_key][attribute])
 
+    def update(self):
+        """
+        Write current dict from the memory to the disk
+        Must be called in a TRY block except IOError
+        """
+        if not exists(str(self.db_file_path)):
+            raise IOError("file not exists %s"%self.db_file_path)
+        else:
+            import os
+            #don't want .db postfix
+            os.rename(self.db_file_path,'old_'+str(self.db_file_path[:-3])+'.db')
+        new_db = shelve.open(self.db_file_path[:-3])
+
+        #need deep copy instead of pointers
+        for key in self.mem.keys():
+            new_db[key] = self.mem[key]
+
+        new_db.close()
+        
     def generate_html(self):
         """
         Generate a webpage containing all loaded items from .xml (or modified tree)
@@ -76,14 +101,27 @@ class dbManager(object):
         """
         print(dict(self.mem))
 
-    def __del__(self):
-        self.mem.close()
 
 if __name__ == "__main__":
 
-    db = dbManager('supreme_db','supremeSpider_products.db')
+    db = dbManager('supreme_db','supremeSpider_products.db','1')
     print ("YES!")
     db.load_db()
     print(db.get_num())
     db.debug_print()
+    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
+    try:
+        db.modify('Supreme: Cable Stripe Knit L/S Polo','price','$50000')
+        db.modify('Supreme: Camo Waffle Thermal','price',u'$900982')
+    except KeyError as K:
+        print ("ended with exception: %s" % K)
 
+    try:
+        db.update()
+    except Exception as K:
+        print("IOERROR EXCP: %s"%K)
+
+    newdb = dbManager('new_db','supremeSpider_products.db','1')
+        
+    newdb.load_db()
+    newdb.debug_print()

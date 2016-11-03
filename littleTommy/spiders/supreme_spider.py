@@ -36,8 +36,8 @@ class supremeSpider(CrawlSpider):
         name = tmpList[0]
         name = name.replace('\\\\xae','')
         name = name.replace('\\xae','')
-        l.add_value('name',name)
-        l.add_value('color',color[1:])
+        l.add_value('name',name[:-1])#no space wanted in the end
+        l.add_value('color',color[1:])#no space wanted in the begginging
         l.add_value('url',response.url)
         l.add_xpath('price','//p[@class="price"]/span/text()')
         l.add_value('pic_url',picUrl)
