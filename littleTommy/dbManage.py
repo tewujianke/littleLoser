@@ -32,7 +32,7 @@ class dbManager(object):
         Calling Load will load .db into the memory
         Must be called first before any other operations!
         """
-        if not exists(str(self.db_file_path)):
+        if not exists('./db/'+str(self.db_file_path)):
             raise IOError("file not exists")
         else:
             database_read_from_disk = shelve.open('./db/'+str(self.db_file_path))
@@ -75,12 +75,12 @@ class dbManager(object):
         Write current dict from the memory to the disk
         Must be called in a TRY block except IOError
         """
-        if not exists(str(self.db_file_path)):
+        if not exists('./db/'+str(self.db_file_path)):
             raise IOError("file not exists %s"%self.db_file_path)
         else:
             import os
             #don't want .db postfix
-            os.rename(self.db_file_path,'old_'+str(self.db_file_path[:-3])+'.db')
+            os.rename('./db/'+self.db_file_path,'./db/'+'old_'+str(self.db_file_path[:-3])+'.db')
         new_db = shelve.open('./db/'+self.db_file_path[:-3])
 
         #need deep copy instead of pointers
@@ -133,8 +133,8 @@ if __name__ == "__main__":
     db.debug_print()
     print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n\n\n\n")
     try:
-        db.modify('Supreme: Cable Stripe Knit L/S Polo','price','$50000')
-        db.modify('Supreme: Camo Waffle Thermal','price',u'$900982')
+
+        db.modify('Supreme: Reversible Hooded Puffy Jacket','price',u'$900982')
     except KeyError as K:
         print ("ended with exception: %s" % K)
 
@@ -150,9 +150,9 @@ if __name__ == "__main__":
 
     try:
         print("started")
-        if 'Supreme: Camo Waffle Thermal' in newdb:
+        if 'Supreme: Reversible Hooded Puffy Jacket' in newdb:
             print("Found")
-            print(newdb['Supreme: Camo Waffle Thermal'])
+            print(newdb['Supreme: Reversible Hooded Puffy Jacket'])
         else:
             print('not found')
             
