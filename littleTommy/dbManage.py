@@ -35,7 +35,7 @@ class dbManager(object):
         if not exists(str(self.db_file_path)):
             raise IOError("file not exists")
         else:
-            database_read_from_disk = shelve.open(str(self.db_file_path))
+            database_read_from_disk = shelve.open('./db/'+str(self.db_file_path))
             self.mem = dict(database_read_from_disk)
             database_read_from_disk.close()
 
@@ -81,7 +81,7 @@ class dbManager(object):
             import os
             #don't want .db postfix
             os.rename(self.db_file_path,'old_'+str(self.db_file_path[:-3])+'.db')
-        new_db = shelve.open(self.db_file_path[:-3])
+        new_db = shelve.open('./db/'+self.db_file_path[:-3])
 
         #need deep copy instead of pointers
         for key in self.mem.keys():

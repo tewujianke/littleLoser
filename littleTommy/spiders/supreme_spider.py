@@ -8,7 +8,7 @@ from scrapy.loader import ItemLoader
 
 
 
-logging.basicConfig(filename='log_supreme_spider.log',level=logging.INFO)
+logging.basicConfig(filename='./log/log_supreme_spider.log',level=logging.INFO)
                     
 class supremeSpider(CrawlSpider):
 

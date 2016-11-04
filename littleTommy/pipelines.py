@@ -14,7 +14,7 @@ import os.path
 
 import shelve
 import logging
-#logging.basicConfig(filename='log_pipe.log',level=logging.INFO)
+logging.basicConfig(filename='./log/log_pipe.log',level=logging.INFO)
 
 class dbExportPipeline(object):
 
@@ -43,7 +43,7 @@ class dbExportPipeline(object):
             raise DropException('item not valid')
         
         logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
-        db = shelve.open('%s_products'%spider.name)
+        db = shelve.open('./db/%s_products'%spider.name)
         for key in item.keys():
             item_dict[str(key)] = item[str(key)][0]
 #        logging.info("!! %s: %s"%(item.keys(),item[key]))
