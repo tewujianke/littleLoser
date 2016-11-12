@@ -42,7 +42,7 @@ class dbExportPipeline(object):
             logging.info("tommyPipeline: dropped an item")
             raise DropException('item not valid')
         
-        logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
+#        logging.info("tommyPipeline: received an item. valid = %d",item['valid'])
         db = shelve.open('./db/%s_products'%spider.name)
         for key in item.keys():
             item_dict[str(key)] = item[str(key)][0]

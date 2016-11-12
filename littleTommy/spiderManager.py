@@ -1,3 +1,4 @@
+
 from __future__ import print_function
 from subprocess import Popen
 import subprocess
@@ -9,7 +10,8 @@ class NotAString (Exception): pass
 
 class startSpiderThread(threading.Thread):
     """
-    Thread object to start a spider thread. 
+    Thread object to start a spider thread.
+    Aux Class
     THIS OBJECT SHOULD NOT BE USED OUTSIDE
     """
     def __init__(self,spider):
@@ -19,8 +21,8 @@ class startSpiderThread(threading.Thread):
     def run(self):
         logging.info('starting spider %s'%self.spider_name)
         #supremeSpider
-        with Popen('scrapy crawl %s'%self.spider_name,stdout=subprocess.PIPE,shell=True) as Proc:
-            logging.info("finished thread")
+        Popen('scrapy crawl %s'%self.spider_name,stdout=subprocess.PIPE,shell=True) 
+
         logging.info('%s spider finished'%self.spider_name)
         
 class spiderManager(object):
